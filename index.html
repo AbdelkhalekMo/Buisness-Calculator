@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة الأسعار - منتجات الأكريليك والخشب</title>
+    <!-- Bootstrap RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card main-card">
+                    <div class="card-header text-center">
+                        <h2 class="mb-0">حاسبة أسعار المنتجات</h2>
+                    </div>
+                    <div class="card-body">
+                        <!-- Product Type Selection -->
+                        <div class="mb-4">
+                            <h5 class="section-title">نوع المنتج</h5>
+                            <div class="d-flex justify-content-center">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="productType" id="woodType" value="wood" checked>
+                                    <label class="form-check-label" for="woodType">خشب</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="productType" id="acrylicType" value="acrylic">
+                                    <label class="form-check-label" for="acrylicType">أكريليك</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product Dimensions -->
+                        <div class="mb-4">
+                            <h5 class="section-title">أبعاد المنتج (سم)</h5>
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <label for="length" class="form-label">الطول</label>
+                                    <input type="number" class="form-control" id="length" min="1" step="1" required>
+                                </div>
+                                <div class="col-6">
+                                    <label for="width" class="form-label">العرض</label>
+                                    <input type="number" class="form-control" id="width" min="1" step="1" required>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="withFrame">
+                                    <label class="form-check-label" for="withFrame">
+                                        مع إطار
+                                    </label>
+                                </div>
+                                <div class="form-check wood-only-option">
+                                    <input class="form-check-input" type="checkbox" id="twoLayers">
+                                    <label class="form-check-label" for="twoLayers">
+                                        طبقتين 
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Accessories -->
+                        <div class="mb-4">
+                            <h5 class="section-title">إضافات</h5>
+                            <select class="form-select mb-2" id="accessorySelect">
+                                <option value="" selected disabled>اختر إضافة</option>
+                                <option value="names" data-price="10">أسماء</option>
+                                <option value="cutSentence" data-price="10">جملة مقطوعة</option>
+                                <option value="engravedSentence" data-price="15">جملة محفورة</option>
+                                <option value="fingerprints" data-price="10">أماكن بصمات</option>
+                                <option value="acrylicBox" data-price="50">صندوق أكريليك</option>
+                            </select>
+                        </div>
+
+                        <!-- Selected Accessories -->
+                        <div class="mb-4">
+                            <h5 class="section-title">الإضافات المختارة</h5>
+                            <div id="selectedAccessories" class="selected-items">
+                                <!-- Selected items will be added here dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Price Calculator -->
+                        <div class="price-section text-center py-3">
+                            <h3 class="mb-3">إجمالي السعر</h3>
+                            <div class="price-display">
+                                <span id="totalPrice">0</span>
+                                <span class="currency">جنيه مصري</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PDF Viewer Section -->
+                <div class="card mt-4">
+                    <div class="card-header text-center">
+                        <h3 class="mb-0">دليل المنتجات</h3>
+                    </div>
+                    <div class="card-body text-center">
+                        <p class="mb-3">اضغط على الصورة لعرض كتالوج المنتجات</p>
+                        <a href="https://drive.google.com/file/d/YOUR_GOOGLE_DRIVE_PDF_ID/view" target="_blank" class="pdf-link">
+                            <img src="https://via.placeholder.com/300x200" alt="كتالوج المنتجات" class="img-fluid catalog-img">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+</body>
+</html>

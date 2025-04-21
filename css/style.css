@@ -1,0 +1,168 @@
+/* Global Styles */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e67e22;
+    --light-color: #ecf0f1;
+    --dark-color: #34495e;
+    --success-color: #2ecc71;
+    --danger-color: #e74c3c;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+}
+
+body {
+    font-family: 'Tajawal', 'Cairo', sans-serif;
+    background-color: #f8f9fa;
+    color: var(--dark-color);
+    line-height: 1.6;
+}
+
+/* Main Card Styles */
+.main-card {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.card-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    border-bottom: none;
+}
+
+.section-title {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--secondary-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+/* Form Elements */
+.form-control, .form-select {
+    border-radius: var(--border-radius);
+    border: 1px solid #ced4da;
+    padding: 0.75rem;
+    transition: all 0.3s;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+}
+
+.form-check-input:checked {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+/* Wood-only options */
+.wood-only-option {
+    display: none;
+}
+
+.wood-type-selected .wood-only-option {
+    display: block;
+}
+
+/* Selected Items */
+.selected-items {
+    min-height: 100px;
+    border: 1px dashed #ced4da;
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+}
+
+.selected-item {
+    background-color: var(--light-color);
+    border-radius: calc(var(--border-radius) - 2px);
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s;
+}
+
+.selected-item:hover {
+    background-color: #e3e7ea;
+}
+
+.delete-item {
+    color: var(--danger-color);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.delete-item:hover {
+    transform: scale(1.2);
+}
+
+/* Price Section */
+.price-section {
+    background-color: rgba(44, 62, 80, 0.05);
+    border-radius: var(--border-radius);
+    margin-top: 1rem;
+}
+
+.price-display {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.currency {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+    color: var(--dark-color);
+}
+
+/* PDF Section */
+.catalog-img {
+    border-radius: var(--border-radius);
+    transition: transform 0.3s;
+    box-shadow: var(--shadow);
+    max-width: 100%;
+    height: auto;
+}
+
+.catalog-img:hover {
+    transform: scale(1.05);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .price-display {
+        font-size: 2rem;
+    }
+    
+    .currency {
+        font-size: 1.2rem;
+    }
+    
+    .col-6 {
+        padding: 0 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 0.5rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .price-display {
+        font-size: 1.8rem;
+    }
+}
+
+/* Add Google Fonts - Tajawal is a good Arabic font */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
