@@ -10,7 +10,7 @@ const PRICING = {
     },
     frame: {
         unitSize: 5, // 5cm x 5cm
-        unitPrice: 0.6, // 0.6 L.E per unit (changed from 4)
+        unitPrice: 1, // 1 L.E per unit 
     },
     accessories: {
         names: { name: "أسماء", price: 10 },
@@ -29,6 +29,8 @@ const elements = {
     width: document.getElementById('width'),
     withFrame: document.getElementById('withFrame'),
     twoLayers: document.getElementById('twoLayers'),
+    thickness43ml: document.getElementById('thickness43ml'),
+    forShop: document.getElementById('forShop'),
     accessorySelect: document.getElementById('accessorySelect'),
     selectedAccessories: document.getElementById('selectedAccessories'),
     totalPrice: document.getElementById('totalPrice')
@@ -41,6 +43,8 @@ let state = {
     width: 0,
     withFrame: false,
     twoLayers: false,
+    thickness43ml: false,
+    forShop: false,
     accessories: [],
     totalPrice: 0
 };
@@ -104,7 +108,25 @@ function updateTotalPrice() {
     const framePrice = calculateFramePrice();
     const accessoriesPrice = calculateAccessoriesPrice();
     
-    state.totalPrice = basePrice + framePrice + accessoriesPrice;
+    let totalPrice = basePrice + framePrice + accessoriesPrice;
+    
+    // Apply 4.3ml thickness markup (35%) if selected and product type is wood
+    if (state.productType === 'wood' && state.thickness43ml) {
+        totalPrice += totalPrice * 0.35;
+    }
+    
+    // Apply shop markup based on total price
+    if (state.forShop) {
+        if (totalPrice < 100) {
+            totalPrice += totalPrice * 0.40; // 40% markup for prices < 100
+        } else if (totalPrice <= 200) {
+            totalPrice += totalPrice * 0.25; // 25% markup for prices between 100 and 200
+        } else {
+            totalPrice += totalPrice * 0.20; // 20% markup for prices > 200
+        }
+    }
+    
+    state.totalPrice = totalPrice;
     elements.totalPrice.textContent = state.totalPrice.toFixed(0);
 }
 
@@ -115,10 +137,14 @@ function updateProductTypeVisibility() {
         mainCard.classList.add('wood-type-selected');
     } else {
         mainCard.classList.remove('wood-type-selected');
-        // If switching from wood to acrylic, disable two layers
+        // If switching from wood to acrylic, disable wood-only options
         if (state.twoLayers) {
             state.twoLayers = false;
             elements.twoLayers.checked = false;
+        }
+        if (state.thickness43ml) {
+            state.thickness43ml = false;
+            elements.thickness43ml.checked = false;
         }
     }
 }
@@ -127,8 +153,11 @@ function updateSelectedAccessories() {
     // Clear existing items
     elements.selectedAccessories.innerHTML = '';
     
-    // If no accessories, no frame, and no two layers, add a placeholder message
-    if (state.accessories.length === 0 && !state.withFrame && !(state.productType === 'wood' && state.twoLayers)) {
+    // If no accessories, no frame, no two layers, no thickness43ml, and no forShop, add a placeholder message
+    if (state.accessories.length === 0 && !state.withFrame && 
+        !(state.productType === 'wood' && state.twoLayers) && 
+        !(state.productType === 'wood' && state.thickness43ml) && 
+        !state.forShop) {
         const placeholder = document.createElement('div');
         placeholder.className = 'text-muted text-center p-3';
         placeholder.textContent = 'لم يتم إضافة أي إضافات بعد';
@@ -156,10 +185,58 @@ function updateSelectedAccessories() {
         const layersItem = document.createElement('div');
         layersItem.className = 'selected-item';
         layersItem.innerHTML = `
-            <span>طبقة ثانية (خصم 33٪)</span>
+            <span> طبقة ثانية</span>
             <span>${secondLayerPrice.toFixed(0)} جنيه</span>
         `;
         elements.selectedAccessories.appendChild(layersItem);
+    }
+    
+    // Add 4.3ml thickness if selected (wood only)
+    if (state.productType === 'wood' && state.thickness43ml) {
+        const basePrice = calculateBasePrice();
+        const framePrice = calculateFramePrice();
+        const accessoriesPrice = calculateAccessoriesPrice();
+        const subtotal = basePrice + framePrice + accessoriesPrice;
+        const thicknessPrice = subtotal * 0.35;
+        
+        const thicknessItem = document.createElement('div');
+        thicknessItem.className = 'selected-item';
+        thicknessItem.innerHTML = `
+            <span>سماكة 4.3 مل </span>
+            <span>${thicknessPrice.toFixed(0)} جنيه</span>
+        `;
+        elements.selectedAccessories.appendChild(thicknessItem);
+    }
+    
+    // Add shop markup if selected
+    if (state.forShop) {
+        const basePrice = calculateBasePrice();
+        const framePrice = calculateFramePrice();
+        const accessoriesPrice = calculateAccessoriesPrice();
+        let subtotal = basePrice + framePrice + accessoriesPrice;
+        
+        // Apply 4.3ml thickness markup first if applicable
+        if (state.productType === 'wood' && state.thickness43ml) {
+            subtotal += subtotal * 0.35;
+        }
+        
+        let markupPercentage;
+        if (subtotal < 100) {
+            markupPercentage = 0.40; // 40% markup for prices < 100
+        } else if (subtotal <= 200) {
+            markupPercentage = 0.25; // 25% markup for prices between 100 and 200
+        } else {
+            markupPercentage = 0.20; // 20% markup for prices > 200
+        }
+        const markupPrice = subtotal * markupPercentage;
+        
+        const shopItem = document.createElement('div');
+        shopItem.className = 'selected-item';
+        shopItem.innerHTML = `
+            <span>للمحل ${markupPercentage * 100}٪)</span>
+            <span>${markupPrice.toFixed(0)} جنيه</span>
+        `;
+        elements.selectedAccessories.appendChild(shopItem);
     }
     
     // Add all accessories
@@ -220,6 +297,20 @@ function setupEventListeners() {
     // Two layers checkbox (wood only)
     elements.twoLayers.addEventListener('change', (e) => {
         state.twoLayers = e.target.checked;
+        updateSelectedAccessories();
+        updateTotalPrice();
+    });
+    
+    // Thickness 4.3ml checkbox (wood only)
+    elements.thickness43ml.addEventListener('change', (e) => {
+        state.thickness43ml = e.target.checked;
+        updateSelectedAccessories();
+        updateTotalPrice();
+    });
+    
+    // For shop checkbox
+    elements.forShop.addEventListener('change', (e) => {
+        state.forShop = e.target.checked;
         updateSelectedAccessories();
         updateTotalPrice();
     });
